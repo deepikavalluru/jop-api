@@ -1,21 +1,17 @@
-const puppeteer = require("puppeteer-core");
+const {chromium} = require("playwright");
 const Job = require("../models/Job");
 
 const scrapeRemoteOk = async () => {
     try {
         console.log("Scraper started");
 
-        const browser = await puppeteer.launch({
-            executablePath : process.env.PUPPETEER_EXECUTABLE_PATH || "/usr/bin/chromium-browser",
-            args: ["--no-sandbox", "--disable-setuid-sandbox"],
-            headless: true
+        const browser = await chromium.launch({
+            args: ["--no-sandbox"]
         });
 
         const page = await browser.newPage();
 
-        await page.goto("https://remoteOk.com/remote-dev-jobs", {
-            waitUntil: "networkidle2"
-        });
+        await page.goto("https://remoteok.com/remote-dev-jobs");
 
         const jobs = await page.evaluate(() => {
             const rows = document.querySelectorAll("tr.job");
@@ -28,11 +24,14 @@ const scrapeRemoteOk = async () => {
 
                 if (!title || !company || !href) return null;
 
-                const applyLink = "https://remoteok.com" + job.getAttribute("data-href");
+                const applyLink = "https://remoteok.com" + href;
 
                 return { title, company, location, applyLink };
-            });
+            })
+            .filter(Boolean);
         });
+
+        console.log("Jobs fetched : ", jobs.length);
 
         for (let job of jobs) {
             try {
@@ -50,8 +49,8 @@ const scrapeRemoteOk = async () => {
             }
         }
 
+        console.log("Jobs saved; Scraping Done!!");
         await browser.close();
-        console.log("Scraping Done");
     } catch(err) {
         console.error("Scraper ERROR: ", err.message);
     }
