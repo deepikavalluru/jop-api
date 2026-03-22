@@ -1,34 +1,29 @@
-const {chromium} = require("playwright");
+const axios = require("axios");
+const cheerio = require("cheerio");
 const Job = require("../models/Job");
 
 const scrapeRemoteOk = async () => {
     try {
         console.log("Scraper started");
 
-        const browser = await chromium.launch({
-            args: ["--no-sandbox"]
-        });
+        const { data } = await axios.get("https://remoteok.com/remote-dev-jobs");
 
-        const page = await browser.newPage();
+        const $ = cheerio.load(data);
+        const jobs = [];
 
-        await page.goto("https://remoteok.com/remote-dev-jobs");
+        $("tr.job").each((i, el) => {
+            const title = $(el).find("h2").text();
+            const company = $(el).find(".companyLink h3").text();
+            const location = $(el).find(".location").text() || "Remote";
+            const href = $(el).attr("data-href");
 
-        const jobs = await page.evaluate(() => {
-            const rows = document.querySelectorAll("tr.job");
-
-            return Array.from(rows).map(job => {
-                const title = job.querySelector("h2")?.innerText;
-                const company = job.querySelector(".companyLink h3")?.innerText;
-                const location = job.querySelector(".location")?.innerText || "Remote";
-                const href = job.getAttribute("data-href");
-
-                if (!title || !company || !href) return null;
-
-                const applyLink = "https://remoteok.com" + href;
-
-                return { title, company, location, applyLink };
-            })
-            .filter(Boolean);
+            if (!title || !company || !href) return;
+            jobs.push({
+                title,
+                company,
+                location,
+                applyLink: "https://remoteok.com" + href
+            });
         });
 
         console.log("Jobs fetched : ", jobs.length);
@@ -51,7 +46,7 @@ const scrapeRemoteOk = async () => {
 
         console.log("Jobs saved; Scraping Done!!");
         await browser.close();
-    } catch(err) {
+    } catch (err) {
         console.error("Scraper ERROR: ", err.message);
     }
 };
