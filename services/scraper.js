@@ -3,6 +3,7 @@ const Job = require("../models/Job");
 
 const scrapeRemoteOk = async () => {
     const browser = await puppeteer.launch({
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
         headless: true
     });
 
