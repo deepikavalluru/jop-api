@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const Job = require("../models/Job");
 
 const scrapeRemoteOk = async () => {
@@ -6,7 +6,7 @@ const scrapeRemoteOk = async () => {
         console.log("Scraper started");
 
         const browser = await puppeteer.launch({
-            executablePath : "/opt/render/.cache/puppeteer/chrome/linux-146.0.7680.153/chrome-linux64/chrome",
+            executablePath : process.env.PUPPETEER_EXECUTABLE_PATH || "/usr/bin/chromium-browser",
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
             headless: true
         });
