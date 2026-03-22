@@ -16,8 +16,8 @@ app.use(cors());
 app.use(express.json());
 
 connectDB();
-//cleardb();
-cron.schedule("* * * * *", () => {
+//cleardb(); 
+cron.schedule("0 */4 * * *", () => {
     console.log("Running scraper!!...");
     scrapeRemoteOk();
 });
