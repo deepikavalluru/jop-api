@@ -6,6 +6,7 @@ const scrapeRemoteOk = async () => {
         console.log("Scraper started");
 
         const browser = await puppeteer.launch({
+            executablePath : "/opt/render/.cache/puppeteer/chrome/linux-146.0.7680.153/chrome-linux64/chrome",
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
             headless: true
         });
