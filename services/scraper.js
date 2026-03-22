@@ -5,7 +5,7 @@ const scrapeRemoteOk = async () => {
     try {
         console.log("Scraper started");
 
-        const { data } = await axios.get("https://remoteok.com/remote-dev-jobs");
+        const { data } = await axios.get("https://remotive.com/api/remote-jobs");
 
         const jobs = data.jobs;
 
@@ -17,10 +17,10 @@ const scrapeRemoteOk = async () => {
                     { applyLink: job.url },
                     {
                         title: job.title,
-                        compsny: job.company_name,
+                        company: job.company_name,
                         location: job.candidate_required_location || "Remote",
                         applyLink: job.url,
-                        skills: jobs.tag || [],
+                        skills: job.tags || [],
                         source: "remotive"
                     },
                     { upsert: true }
