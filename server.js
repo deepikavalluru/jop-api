@@ -17,7 +17,10 @@ app.use(express.json());
 
 connectDB();
 //cleardb();
-scrapeRemoteOk();
+cron.schedule("* * * * *", () => {
+    console.log("Running scraper!!...");
+    scrapeRemoteOk();
+});
 
 app.use('/api/jobs', jobRoutes);
 app.use('/api/auth', authRoutes);
