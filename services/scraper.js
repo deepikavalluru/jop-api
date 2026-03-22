@@ -8,8 +8,8 @@ const scrapeRemoteOk = async () => {
 
         const { data } = await axios.get("https://remoteok.com/remote-dev-jobs", {
             headers: {
-                "User-Agent": "...",
-                "Referer": "https://google.com",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
+                "Referer": "https://www.google.com/",
                 "Accept-Language": "en-US,en;q=0.9"
             }
         });
@@ -51,7 +51,6 @@ const scrapeRemoteOk = async () => {
         }
 
         console.log("Jobs saved; Scraping Done!!");
-        await browser.close();
     } catch (err) {
         console.error("Scraper ERROR: ", err.message);
     }
