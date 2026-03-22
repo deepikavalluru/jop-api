@@ -17,6 +17,7 @@ app.use(express.json());
 
 connectDB();
 //cleardb(); 
+scrapeRemoteOk();
 cron.schedule("0 */4 * * *", () => {
     console.log("Running scraper!!...");
     scrapeRemoteOk();
