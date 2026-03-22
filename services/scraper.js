@@ -8,9 +8,9 @@ const scrapeRemoteOk = async () => {
 
         const { data } = await axios.get("https://remoteok.com/remote-dev-jobs", {
             headers: {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36",
-                "Accept-Language": "en-US,en;q=0.9",
-                "Accept": "text/html,application/xhtml+xml"
+                "User-Agent": "...",
+                "Referer": "https://google.com",
+                "Accept-Language": "en-US,en;q=0.9"
             }
         });
 
