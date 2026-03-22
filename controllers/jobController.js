@@ -15,7 +15,7 @@ const getJobs  =async (req, res) => {
 
         const jobs = await Job.find(query).sort({ createdAt: -1 });
         res.json(jobs);
-        
+        console.log("Returned jobs length: ", jobs.length );
     } catch(err) {
         res.status(500).json({error: err.message});
     }

@@ -5,8 +5,9 @@ const connectDB = require('./config/db');
 const jobRoutes = require('./routes/jobRoutes');
 const authRoutes = require("./routes/authRoutes");
 const cron = require("node-cron");
-const scrapeRemoteOk = require("./services/scraper");
+const scrapeRemotive = require("./services/scrapeRemotive");
 const cleardb = require('./cleardb');
+const scrapeArbeitnow = require('./services/arbeitnowScraper');
 
 dotenv.config();
 
@@ -17,10 +18,12 @@ app.use(express.json());
 
 connectDB();
 //cleardb(); 
-scrapeRemoteOk();
+scrapeRemotive();
+scrapeArbeitnow();
 cron.schedule("0 */4 * * *", () => {
     console.log("Running scraper!!...");
-    scrapeRemoteOk();
+    scrapeRemotive();
+    scrapeArbeitnow();
 });
 
 app.use('/api/jobs', jobRoutes);
@@ -33,5 +36,5 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log(`Server listenng on ${PORT}`);
+    console.log(` Server listenng on ${PORT}`);
 });

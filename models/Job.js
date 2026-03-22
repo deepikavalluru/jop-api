@@ -3,15 +3,21 @@ const mongoose = require('mongoose');
 const jobSchema = new mongoose.Schema({
     title: {
         type: String,
-        required : true
+        required : true,
+        toLowerCase: true,
+        trim: true
     },
     company: {
         type: String,
-        required: true
+        required: true,
+        toLowerCase: true,
+        trim: true
     },
     location: {
         type: String,
-        default: "Remote"
+        default: "Remote",
+        toLowerCase: true,
+        trim: true
     },
     applyLink: {
         type: String,
@@ -29,4 +35,5 @@ const jobSchema = new mongoose.Schema({
     },
 }, {timestamps: true});
 
+jobSchema.index({applyLink : 1}, {unique: true});
 module.exports = mongoose.model("Job", jobSchema);
